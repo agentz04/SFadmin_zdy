@@ -1,0 +1,55 @@
+---
+- name: Install zabbix-agent on Ubuntu
+  apt:
+    name: zabbix-agent
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install zabbix-agent on CentOS
+  yum:
+    name: zabbix-agent
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: include directory  on Ubuntu
+  file:
+    path: /etc/zabbix/zabbix_agentd.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_os_family == "Debian"
+
+- name: incude directory on CentOS
+  file:
+    path: /etc/zabbix_agentd.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_os_family == "RedHat"
+
+- name: Configure Zabbix agent on Ubuntu
+  template:
+    src: zabbix_agentd_ubuntu.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == "Debian"
+
+- name: Configure Zabbix agent on CentOS
+  template:
+    src: zabbix_agentd_centos.conf.j2
+    dest: /etc/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure zabbix-agent is enabled and running
+  systemd:
+    name: zabbix-agent
+    state: started
+    enabled: yes
