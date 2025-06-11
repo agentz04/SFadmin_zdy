@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+    - name: Add ansible-admin on Ubuntu
+      when: ansible_os_family == "Debian"
+      user:
+        name: ansible-admin
+        groups: sudo
+        shell: /bin/bash
+        state: present
+        create_home: yes
+
+    - name: Add ansible-admin on CentOS
+      when: ansible_os_family == "RedHat"
+      user:
+        name: ansible-admin
+        groups: wheel
+        shell: /bin/bash
+        state: present
+        create_home: yes
+
+    - name: Add SSH key for ansible-admin
+      authorized_key:
+        user: ansible-admin
+        key: "{{ lookup('file', '/etc/ansible/common/files/id_rsa.pub') }}"
