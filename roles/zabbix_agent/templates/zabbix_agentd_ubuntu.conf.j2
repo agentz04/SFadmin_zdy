@@ -1,0 +1,6 @@
+PidFile=/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix/zabbix_agentd.log
+Server=89.169.160.159
+ServerActive=89.169.160.159
+Hostname={{ inventory_hostname }}
+Include=/etc/zabbix/zabbix_agentd.d/*.conf
