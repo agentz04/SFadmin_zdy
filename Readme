@@ -1,1 +1,6 @@
-information of repository agentz04
+Прокатил роли
+
+install_postgresql для установки  ан сервер h13 postgresql 12 на almalinux 
+install_services.yml для установки zabbix_agent на h12 ubuntu
+install_services_zab_redhat.yml для установки zabbix_agent на h13 alma linux
+install_web_h12.yml для установки nginx, apache на h12 ubuntu
