@@ -1,0 +1,6 @@
+---
+- name: Install PostgreSQL 12 on h13
+  hosts: h13_host
+  become: true
+  roles:
+    - postgresql

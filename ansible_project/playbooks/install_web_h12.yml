@@ -1,0 +1,7 @@
+---
+- name: Install web stack on h12
+  hosts: h12
+  become: true
+
+  roles:
+    - web_stack

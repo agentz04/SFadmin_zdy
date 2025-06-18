@@ -1,0 +1,36 @@
+---
+- name: Create pgdg12.repo file
+  copy:
+    dest: /etc/yum.repos.d/pgdg12.repo
+    content: |
+      [pgdg12]
+      name=PostgreSQL 12 for RHEL/CentOS/AlmaLinux $releasever - $basearch
+      baseurl=https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-9-x86_64
+      enabled=1
+      gpgcheck=0
+
+- name: Refresh package metadata
+  command: dnf makecache
+
+- name: Disable built-in PostgreSQL module
+  shell: dnf -qy module disable postgresql
+  args:
+    warn: false
+
+- name: Install PostgreSQL 12
+  yum:
+    name:
+      - postgresql12
+      - postgresql12-server
+    state: present
+
+- name: Initialize PostgreSQL DB
+  command: /usr/pgsql-12/bin/postgresql-12-setup initdb
+  args:
+    creates: /var/lib/pgsql/12/data/PG_VERSION
+
+- name: Enable and start PostgreSQL 12
+  service:
+    name: postgresql-12
+    state: started
+    enabled: true

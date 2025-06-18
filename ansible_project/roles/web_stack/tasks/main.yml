@@ -1,0 +1,38 @@
+---
+- name: Install required packages
+  apt:
+    name:
+      - nginx
+      - apache2
+      - php
+      - libapache2-mod-php
+      - php-mysql
+    state: present
+    update_cache: yes
+
+- name: Change Apache port to 8080
+  lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen 80'
+    line: 'Listen 8080'
+    state: present
+    backup: yes
+
+- name: Change default Apache virtual host port
+  replace:
+    path: /etc/apache2/sites-available/000-default.conf
+    regexp: '^<VirtualHost \*:80>'
+    replace: '<VirtualHost *:8080>'
+    backup: yes
+
+- name: Restart apache2
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes
+
+- name: Ensure nginx is running
+  service:
+    name: nginx
+    state: started
+    enabled: yes

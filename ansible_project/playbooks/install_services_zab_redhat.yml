@@ -1,0 +1,6 @@
+---
+- name: Install Zabbix Agent on h12 and h13
+  hosts: h12_host,h13_host
+  become: true
+  roles:
+    - zabbix_agent

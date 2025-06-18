@@ -1,0 +1,30 @@
+
+- name: Download Zabbix GPG key
+  get_url:
+    url: https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
+    mode: '0644'
+
+- name: Import Zabbix GPG key using rpm
+  command: rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
+  args:
+    creates: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX
+
+- name: Install Zabbix agent
+  yum:
+    name: zabbix-agent
+    state: present
+
+- name: Copy default Zabbix agent config
+  copy:
+    src: zabbix_agentd.conf
+    dest: /etc/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start Zabbix agent service
+  service:
+    name: zabbix-agent
+    enabled: yes
+    state: started
